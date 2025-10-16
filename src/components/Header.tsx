@@ -4,7 +4,7 @@
 import React, { useState } from "react";
 import useScrollSpy from "@/lib/useScrollSpy";
 
-const SECTION_IDS = ["hero", "experience", "blogs", "projects", "timeline"];
+const SECTION_IDS = ["hero", "experience", "blogs", "projects", "timeline", "achievements", "skills"];
 
 export default function Header() {
   
