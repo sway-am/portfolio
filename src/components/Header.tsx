@@ -4,20 +4,29 @@
 import React, { useState } from "react";
 import useScrollSpy from "@/lib/useScrollSpy";
 
-const SECTION_IDS = ["hero", "experience", "blogs", "projects", "timeline", "achievements", "skills"];
+const SECTION_IDS = ["About Me", "experience", "blogs", "projects", "timeline", "achievements", "skills"];
 
 export default function Header() {
-  
   const activeId = useScrollSpy(SECTION_IDS);
-
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-white/70 backdrop-blur-md">
-      <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-        <a href="#hero" onClick={(e) => { e.preventDefault(); const el = document.getElementById("hero"); if (el) el.scrollIntoView({ behavior: "smooth" }); }} className="font-semibold">Swayam</a>
+    // 1. Added a subtle border and background for depth
+    <header className="sticky top-0 z-50 border-b border-slate-200/30 bg-white/80 backdrop-blur-md dark:border-slate-500/30 dark:bg-slate-900/80">
+      <div className="w-full px-4 py-3 flex items-center justify-between">
+        <a 
+          href="#About Me" 
+          onClick={(e) => { 
+            e.preventDefault(); 
+            const el = document.getElementById("About Me"); 
+            if (el) el.scrollIntoView({ behavior: "smooth" }); 
+          }} 
+          className="font-bold font-logo text-slate-800 dark:text-slate-200"
+        >
+          Swayam Mohanty
+        </a>
 
-        <nav className="hidden md:flex space-x-6">
+        <nav className="hidden md:flex items-center space-x-2">
           {SECTION_IDS.map((id) => (
             <a
               key={id}
@@ -27,8 +36,12 @@ export default function Header() {
                 const el = document.getElementById(id);
                 if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
               }}
-              className={`text-sm ${activeId === id ? "text-emerald-600 font-medium" : "text-slate-700"}`}
-              aria-current={activeId === id ? "true" : undefined}
+              // 2. Enhanced active link styling with a "pill" shape
+              className={`rounded-full px-3 py-1 text-sm transition-colors duration-300 ${
+                activeId === id 
+                ? "bg-emerald-100 font-medium text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-400" 
+                : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+              }`}
             >
               {id[0].toUpperCase() + id.slice(1)}
             </a>
@@ -41,6 +54,7 @@ export default function Header() {
         </button>
       </div>
 
+      {/* Mobile Menu */}
       {open && (
         <div className="md:hidden px-4 pb-4">
           {SECTION_IDS.map((id) => (
@@ -53,7 +67,7 @@ export default function Header() {
                 const el = document.getElementById(id);
                 if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
               }}
-              className={`block py-2 ${activeId === id ? "text-emerald-600" : ""}`}
+              className={`block rounded-md px-3 py-2 ${activeId === id ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-400" : "text-slate-600 dark:text-slate-300"}`}
             >
               {id[0].toUpperCase() + id.slice(1)}
             </a>
