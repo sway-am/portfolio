@@ -3,15 +3,18 @@ import React, { useEffect, useState, useRef } from "react";
 import { FiX, FiChevronLeft, FiChevronRight, FiAward, FiExternalLink } from "react-icons/fi";
 
 export type Achievement = {
-  id: string | number;
-  title: string;
-  org?: string;
-  year?: string | number;
-  description?: string;
-  tags?: string[];
-  image?: string;
-  link?: string;
+  _id?: string;               // MongoDB ObjectId
+  title: string;               // required
+  organisation?: string;       // optional
+  intro?: string;              // optional short description
+  tags?: string[];             // optional array of strings
+  image?: string;              // optional image URL
+  achievementdate?: string;    // optional date string
+  other_links?: string[];      // optional array of links
+  createdAt?: string;          // optional, from timestamps
+  updatedAt?: string;          // optional, from timestamps
 };
+
 
 const SAMPLE: Achievement[] = [
   {
