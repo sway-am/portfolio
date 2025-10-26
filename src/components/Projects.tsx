@@ -2,16 +2,17 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { FiGithub, FiExternalLink, FiChevronLeft, FiChevronRight, FiSearch, FiCode, FiLayers, FiX } from "react-icons/fi";
 
-type Project = {
+export type Project = {
   id: number;
   title: string;
-  description?: string;
-  points?: string[];
-  tech: string[];
+  intro?: string;           // maps from description
+  fullDescription?: string; // description + points
+  techStack: string[];
   github?: string;
-  demo?: string;
+  liveDemo?: string;        // demo URL
   image?: string;
 };
+
 
 const PROJECTS: Project[] = [
   {

@@ -1,9 +1,18 @@
-import mongoose from "mongoose"
+import mongoose, { Document, Model, Schema } from "mongoose";
 
-const techSchema = new mongoose.Schema({
-    title:{type: String, required: true},
-    skill_type: {type: String, required: true},
-    proficiency: {type: Number, required: true}
+export interface ITechnology extends Document {
+  title: string;
+  skill_type: string;
+  proficiency: number;
+}
+
+const techSchema: Schema<ITechnology> = new Schema({
+  title: { type: String, required: true },
+  skill_type: { type: String, required: true },
+  proficiency: { type: Number, required: true }
 });
 
-export default mongoose.model("Technology", techSchema);
+const Technology: Model<ITechnology> =
+  mongoose.models.Technology || mongoose.model<ITechnology>("Technology", techSchema);
+
+export default Technology;

@@ -2,12 +2,13 @@
 import React, { useState } from "react";
 import { FiCode, FiLayers, FiTool, FiServer, FiDatabase, FiCloud, FiZap } from "react-icons/fi";
 
-type Skill = {
-  name: string;
-  level: number; // 0-100
-  category: string;
-  icon?: string;
+export type Skill = {
+  title: string;        // e.g., "React"
+  skill_type: string;   // e.g., "Frontend", "Backend", "Database", "DevOps", "Tools"
+  proficiency: number;  // 0-100
+  icon?: string;        // optional icon name for frontend
 };
+
 
 type SkillCategory = {
   name: string;

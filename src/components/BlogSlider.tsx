@@ -2,16 +2,17 @@
 import React, { useState } from "react";
 import { FiArrowUpRight, FiSearch, FiX, FiShare2, FiBook, FiClock, FiTag, FiExternalLink, FiCopy, FiCheck } from "react-icons/fi";
 
-type Blog = { 
-  id: number; 
-  title: string; 
-  summary: string; 
-  url: string; 
-  tags?: string[];
-  date?: string;
-  readTime?: number;
-  category?: string;
+type Blog = {
+  id: number;            // frontend identifier
+  title: string;         // backend title
+  intro: string;         // backend intro
+  readTime: number;      // backend readtime
+  tag?: string;          // backend tag
+  hashtags?: string[];   // backend hashtags
+  publishDate?: string;  // backend publishdate (ISO string)
+  articleLink?: string;  // backend article_link
 };
+
 
 const BLOGS: Blog[] = [
   { 
