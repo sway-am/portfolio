@@ -2,54 +2,64 @@
 import React, { useEffect, useState, useRef } from "react";
 import { FiX, FiChevronLeft, FiChevronRight, FiAward, FiExternalLink } from "react-icons/fi";
 
+
 export type Achievement = {
-  _id?: string;               // MongoDB ObjectId
+  _id?: string|number;               // MongoDB ObjectId
   title: string;               // required
   organisation?: string;       // optional
-  intro?: string;              // optional short description
+  intro?: string;              // optional short intro
   tags?: string[];             // optional array of strings
   image?: string;              // optional image URL
-  achievementdate?: string;    // optional date string
-  other_links?: string[];      // optional array of links
+  link?: string;               
   details?: string;
-  createdAt?: string;          // optional, from timestamps
-  updatedAt?: string;          // optional, from timestamps
+  year?: number;               // optional year for sorting/display
 };
 
 
+type Props = { data?: Achievement[] };
 const SAMPLE: Achievement[] = [
   {
-    id: "a1",
-    title: "Best ML Project",
-    org: "University Hackathon",
+    _id: "sample-1",
+    title: "Sample Hackathon Winner",
+    organisation: "Example University",
+    intro: "Won 1st place in the annual hackathon.",
+    
+    details: "Built an accessible note-taking app.",
+    tags: ["hackathon", "web"],
     year: 2023,
-    description: "First place for an end-to-end ML pipeline that predicted energy output.",
-    Details: "Developed a comprehensive machine learning pipeline that integrated data preprocessing, model training, and deployment to predict energy output with high accuracy. The project utilized advanced algorithms and was recognized for its innovation and practical application in the energy sector.",
-    tags: ["Machine Learning", "Python", "Award"],
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",
   },
   {
-    id: "a2",
-    title: "Paper Accepted",
-    org: "Solar Forecasting Workshop",
-    year: 2024,
-    description: "Co-authored a dataset & methods paper on solar forecasting interpretability.",
-    tags: ["Research", "Publication"],
-    image: "https://images.unsplash.com/photo-1532619675605-1ede6c2ed2b0?w=800&h=600&fit=crop",
-    link: "https://example.com/solar-forecasting-paper",
+    _id: "sample-2",
+    title: "Open Source Contributor",
+    organisation: "OpenLib",
+    intro: "Contributed a major feature to OpenLib.",
+    details: "Implemented a pluggable authentication module.",
+    tags: ["open-source"],
+    year: 2023,
   },
-  {
-    id: "a3",
-    title: "Edge Inference Demo",
-    org: "Goldman Sachs Internship",
-    year: 2025,
-    description: "Deployed a TensorRT-optimized model achieving real-time inference on edge devices.",
-    tags: ["TensorRT", "Optimization", "Deployment"],
-    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=600&fit=crop",
-  },
-];
 
-type Props = { data?: Achievement[] };
+  {
+    _id: "sample-3",
+    title: "Sample Hackathon Winner",
+    organisation: "Example University",
+    intro: "Won 1st place in the annual hackathon.",
+    
+    details: "Built an accessible note-taking app.",
+    tags: ["hackathon", "web"],
+    year: 2022,
+  },
+  {
+    _id: "sample-4",
+    title: "Open Source Contributor",
+    organisation: "OpenLib",
+    intro: "Contributed a major feature to OpenLib.",
+    details: "Implemented a pluggable authentication module.",
+    tags: ["open-source"],
+    year: 2021,
+  },
+
+  
+];
 
 export default function AchievementsTimeline({ data }: Props) {
   const items = (data && data.length ? data : SAMPLE).slice().sort((a, b) => Number(b.year ?? 0) - Number(a.year ?? 0));
@@ -178,7 +188,7 @@ export default function AchievementsTimeline({ data }: Props) {
             aria-label="Achievements timeline"
           >
             {items.map((achievement, idx) => (
-              <div key={achievement.id} className="snap-center w-full sm:w-[500px] flex-shrink-0">
+              <div key={achievement._id} className="snap-center w-full sm:w-[500px] flex-shrink-0">
                 <div
                   className={`group relative rounded-2xl overflow-hidden bg-white dark:bg-gray-800 shadow-xl transition-all duration-500 cursor-pointer h-full ${
                     idx === activeIndex 
@@ -186,7 +196,7 @@ export default function AchievementsTimeline({ data }: Props) {
                       : 'hover:scale-102 hover:shadow-2xl'
                   }`}
                   onClick={() => setSelected(achievement)}
-                  onMouseEnter={() => setHoveredCard(achievement.id)}
+                  onMouseEnter={() => setHoveredCard(achievement._id??null)}
                   onMouseLeave={() => setHoveredCard(null)}
                 >
                   {/* Image Section with Overlay */}
@@ -214,7 +224,7 @@ export default function AchievementsTimeline({ data }: Props) {
 
                     {/* Hover Overlay */}
                     <div className={`absolute inset-0 bg-emerald-600/90 dark:bg-emerald-500/90 flex items-center justify-center transition-opacity duration-300 ${
-                      hoveredCard === achievement.id ? 'opacity-100' : 'opacity-0'
+                      hoveredCard === achievement._id ? 'opacity-100' : 'opacity-0'
                     }`}>
                       <span className="text-white font-semibold text-lg">Click to view details</span>
                     </div>
@@ -223,9 +233,9 @@ export default function AchievementsTimeline({ data }: Props) {
                   {/* Content Section */}
                   <div className="p-6">
                     {/* Organization */}
-                    {achievement.org && (
+                    {achievement.organisation && (
                       <div className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-2">
-                        {achievement.org}
+                        {achievement.organisation}
                       </div>
                     )}
 
@@ -234,9 +244,9 @@ export default function AchievementsTimeline({ data }: Props) {
                       {achievement.title}
                     </h3>
 
-                    {/* Description */}
+                    {/* intro */}
                     <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4 line-clamp-3">
-                      {achievement.description}
+                      {achievement.intro}
                     </p>
 
                     {/* Tags */}
@@ -333,7 +343,7 @@ export default function AchievementsTimeline({ data }: Props) {
               {/* Title Overlay */}
               <div className="absolute bottom-0 left-0 right-0 p-8">
                 <div className="inline-block px-4 py-2 rounded-full bg-white/20 backdrop-blur-md text-white text-sm font-semibold mb-3">
-                  {selected.org} • {selected.year}
+                  {selected.organisation} • {selected.year}
                 </div>
                 <h3 className="text-4xl font-bold text-white drop-shadow-lg">
                   {selected.title}
@@ -344,10 +354,10 @@ export default function AchievementsTimeline({ data }: Props) {
             {/* Modal Content */}
             <div className="p-8">
               <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed mb-6">
-                {selected.description}
+                {selected.intro}
               </p>
               <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed mb-6">
-                {selected.Details}
+                {selected.details}
               </p>
 
               {/* Tags */}
