@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import { FiGithub, FiLinkedin, FiMail, FiDownload, FiArrowRight, FiStar, FiCode, FiZap } from "react-icons/fi";
-import FlowBackground from "@/components/FlowBackground";
 
 export default function Hero() {
   const [isVisible, setIsVisible] = useState(false);
@@ -23,8 +22,14 @@ export default function Hero() {
       id="about"
       tabIndex={-1}
       aria-labelledby="hero-heading"
-      className="min-h-screen flex items-center relative overflow-hidden bg-gradient-to-br from-slate-50 via-emerald-50/40 to-teal-50/30 dark:from-gray-950 dark:via-emerald-950/20 dark:to-teal-950/10">
-      <FlowBackground colors={["#34d399", "#a7f3d0", "#99f6e4"]} />
+      className="min-h-screen flex items-center relative overflow-hidden bg-gradient-to-br from-slate-50 via-emerald-100/60 via-40% to-teal-100/50 dark:from-gray-950 dark:via-emerald-950/40 dark:via-40% dark:to-teal-950/30"
+      
+      >
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-20 right-10 w-96 h-96 bg-emerald-300/30 dark:bg-emerald-500/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 left-10 w-80 h-80 bg-teal-300/30 dark:bg-teal-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '5s' }}></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-emerald-200/20 to-teal-200/20 dark:from-emerald-500/10 dark:to-teal-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '6s' }}></div>
+        </div>
     
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">

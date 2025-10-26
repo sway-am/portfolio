@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { FiBriefcase, FiMapPin, FiCalendar, FiChevronDown, FiChevronUp, FiArrowUpRight } from "react-icons/fi";
-import FlowBackground from "@/components/FlowBackground";
+
 // Sample data - replace with your actual data import
 type ExperienceItem = {
   id: string | number;
@@ -76,11 +76,13 @@ export default function Experience() {
       id="experience"
       tabIndex={-1}
       aria-labelledby="experience-heading"
-      className="min-h-screen py-20 bg-gradient-to-br from-teal-50/30 via-white to-blue-50/40 dark:from-teal-950/10 dark:via-gray-900 dark:to-blue-950/20 relative overflow-hidden"
+      className="min-h-screen py-20 bg-gradient-to-br from-teal-100/50 via-blue-100/60 via-40% to-cyan-100/50 dark:from-teal-950/30 dark:via-blue-950/40 dark:via-40% dark:to-cyan-950/30 relative overflow-hidden"
       >
-  <FlowBackground colors={["#34d399", "#bfdbfe", "#dbeafe"]} />
-  
-      
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-40 right-20 w-96 h-96 bg-teal-300/30 dark:bg-teal-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-40 left-20 w-80 h-80 bg-blue-300/30 dark:bg-blue-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+      </div>
+            
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-40 right-20 w-96 h-96 bg-emerald-200/20 dark:bg-emerald-500/10 rounded-full blur-3xl"></div>

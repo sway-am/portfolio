@@ -103,6 +103,7 @@ export default function ProjectsSection() {
     <section 
       id="projects"
       className="min-h-screen w-full py-20 px-6 relative overflow-hidden bg-gradient-to-br from-purple-50/30 via-white to-pink-50/40 dark:from-purple-950/10 dark:via-gray-900 dark:to-pink-950/20"
+    
     >
       {/* Animated background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">

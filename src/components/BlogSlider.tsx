@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { FiArrowUpRight, FiSearch, FiX, FiShare2, FiBook, FiClock, FiTag, FiExternalLink, FiCopy, FiCheck } from "react-icons/fi";
-import FlowBackground from "@/components/FlowBackground";
+
 type Blog = { 
   id: number; 
   title: string; 
@@ -100,15 +100,15 @@ export default function BlogMosaic() {
   return (
     <section 
       id="blogs"
-      className="min-h-screen py-20 px-6 relative overflow-hidden bg-gradient-to-br from-blue-50/40 via-slate-50 to-purple-50/30 dark:from-blue-950/20 dark:via-gray-900 dark:to-purple-950/10"
+      className="min-h-screen py-20 px-6 relative overflow-hidden bg-gradient-to-br from-cyan-100/50 via-blue-100/60 via-40% to-indigo-50/40 dark:from-cyan-950/30 dark:via-blue-950/40 dark:via-40% dark:to-indigo-950/20"
     >
-      <FlowBackground colors={["#93c5fd", "#c4b5fd", "#f5d0fe"]} />
+
+ 
       {/* Animated background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-96 h-96 bg-emerald-200/20 dark:bg-emerald-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-80 h-80 bg-blue-200/20 dark:bg-blue-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-20 left-10 w-96 h-96 bg-blue-300/30 dark:bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-80 h-80 bg-indigo-300/30 dark:bg-indigo-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
       </div>
-
       <div className="mx-auto max-w-7xl relative z-10">
         {/* Header */}
         <header className="mb-16 text-center">
