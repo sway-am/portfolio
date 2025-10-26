@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { FiGithub, FiLinkedin, FiMail, FiDownload, FiArrowRight, FiStar, FiCode, FiZap } from "react-icons/fi";
 
 export default function Hero() {
@@ -22,15 +23,8 @@ export default function Hero() {
       id="about"
       tabIndex={-1}
       aria-labelledby="hero-heading"
-      className="min-h-screen flex items-center relative overflow-hidden bg-gradient-to-br from-slate-50 via-emerald-100/60 via-40% to-teal-100/50 dark:from-gray-950 dark:via-emerald-950/40 dark:via-40% dark:to-teal-950/30"
-      
-      >
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 right-10 w-96 h-96 bg-emerald-300/30 dark:bg-emerald-500/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-20 left-10 w-80 h-80 bg-teal-300/30 dark:bg-teal-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '5s' }}></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-emerald-200/20 to-teal-200/20 dark:from-emerald-500/10 dark:to-teal-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '6s' }}></div>
-        </div>
-    
+      className="min-h-screen flex items-center relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-emerald-50/30 dark:from-gray-950 dark:via-gray-900 dark:to-emerald-950/10"
+    >
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 right-10 w-96 h-96 bg-emerald-200/30 dark:bg-emerald-500/10 rounded-full blur-3xl opacity-50"></div>
@@ -46,11 +40,11 @@ export default function Hero() {
               id="hero-heading"
               className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 text-slate-900 dark:text-white"
             >
-              Hi,I am{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 dark:from-emerald-400 dark:via-teal-400 dark:to-emerald-400">
-                Swayam
-              </span>{" "}
-              👋
+              <span>Hi, I&apos;m</span>{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 dark:from-emerald-400 dark:via-teal-400 dark:to-emerald-400">
+                  Swayam
+                </span>
+              <span role="img" aria-hidden="true" className="text-6xl leading-none">👋</span>
             </h1>
 
             {/* Description */}
@@ -130,12 +124,27 @@ export default function Hero() {
               <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-3xl opacity-75 group-hover:opacity-100 transition-opacity duration-500"></div>
               
               {/* Main image container */}
-              <div className="relative w-72 h-72 sm:w-80 sm:h-80 lg:w-96 lg:h-96 rounded-3xl overflow-hidden shadow-2xl transform group-hover:scale-105 transition-transform duration-500">
-                <img
+              <div className="relative w-72 h-72 sm:w-80 sm:h-80 lg:w-96 lg:h-96 rounded-3xl overflow-hidden shadow-2xl transform group-hover:scale-105 transition-transform duration-500 bg-gradient-to-br from-emerald-500 to-teal-500">
+                <Image
                   src="/Swayam_Pic.jpg"
                   alt="Swayam profile photo"
-                  className="w-full h-full object-cover object-center"
+                  fill
+                  className="object-cover object-center"
+                  priority
+                  sizes="(max-width: 640px) 288px, (max-width: 1024px) 320px, 384px"
+                  onError={(e) => {
+                    // Fallback: show gradient with initial if image fails
+                    e.currentTarget.style.display = 'none';
+                    
+                    {/* Fallback content if image doesn't load */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="text-white text-8xl font-bold">S</span>
+                    </div>
+                  }}
                 />
+                
+                
+                
                 
                 {/* Overlay gradient */}
                 <div className="absolute inset-0 bg-gradient-to-t from-emerald-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -145,7 +154,7 @@ export default function Hero() {
               <div className="absolute -top-4 -right-4 bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 border border-slate-200 dark:border-gray-700">
                 <div className="flex items-center gap-2">
                   <FiCode className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                  <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">1+ Years</span>
+                  <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">1+ Years of Experience</span>
                 </div>
               </div>
             </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import useScrollSpy from "@/lib/useScrollSpy";
 import { FiHome, FiBriefcase, FiBook, FiCode, FiAward, FiZap, FiMail, FiGithub, FiLinkedin, FiMenu, FiX } from "react-icons/fi";
 
 const SECTION_IDS = ["about", "experience", "blogs", "projects", "achievements", "skills"];
@@ -23,34 +24,7 @@ const SECTION_ICONS: Record<string, React.ReactNode> = {
   skills: <FiZap className="w-5 h-5" />
 };
 
-// Custom scroll spy hook
-function useScrollSpy(sectionIds: string[]) {
-  const [activeId, setActiveId] = useState<string>("");
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.id);
-          }
-        });
-      },
-      {
-        rootMargin: "-20% 0px -35% 0px",
-      }
-    );
-
-    sectionIds.forEach((id) => {
-      const element = document.getElementById(id);
-      if (element) observer.observe(element);
-    });
-
-    return () => observer.disconnect();
-  }, [sectionIds]);
-
-  return activeId;
-}
 
 export default function Header() {
   const activeId = useScrollSpy(SECTION_IDS);
@@ -271,19 +245,22 @@ export default function Header() {
                 key={id}
                 href={`#${id}`}
                 onClick={(e) => handleNavClick(e, id)}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-500 ease-out ${
                   activeId === id 
-                    ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg" 
-                    : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-gray-800"
+                    ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg scale-105" 
+                    : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-gray-800 hover:scale-102"
                 }`}
               >
-                {SECTION_ICONS[id]}
-                <span className="font-medium">{SECTION_LABELS[id]}</span>
+                <span className="transition-transform duration-300 ease-out">
+                  {SECTION_ICONS[id]}
+                </span>
+                <span className="font-medium transition-all duration-300 ease-out">{SECTION_LABELS[id]}</span>
                 {activeId === id && (
                   <span className="ml-auto w-2 h-2 bg-white rounded-full animate-pulse"></span>
                 )}
               </a>
             ))}
+
             
             {/* Mobile Contact */}
             <div className="pt-4 mt-4 border-t border-slate-200 dark:border-gray-800">

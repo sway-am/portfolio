@@ -67,6 +67,7 @@ const SAMPLE_DATA: ExperienceItem[] = [
 export default function Experience() {
   const [expanded, setExpanded] = useState(false);
   const [hoveredCard, setHoveredCard] = useState<string | number | null>(null);
+  const [expandedCard, setExpandedCard] = useState<string | number | null>(null);
   
   // Use your actual data import here: const DATA = experience;
   const DATA = SAMPLE_DATA;
@@ -77,16 +78,10 @@ export default function Experience() {
       tabIndex={-1}
       aria-labelledby="experience-heading"
       className="min-h-screen py-20 bg-gradient-to-br from-teal-100/50 via-blue-100/60 via-40% to-cyan-100/50 dark:from-teal-950/30 dark:via-blue-950/40 dark:via-40% dark:to-cyan-950/30 relative overflow-hidden"
-      >
+    >
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-40 right-20 w-96 h-96 bg-teal-300/30 dark:bg-teal-500/20 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-40 left-20 w-80 h-80 bg-blue-300/30 dark:bg-blue-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-      </div>
-            
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-40 right-20 w-96 h-96 bg-emerald-200/20 dark:bg-emerald-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-40 left-20 w-80 h-80 bg-blue-200/20 dark:bg-blue-500/10 rounded-full blur-3xl"></div>
       </div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -115,11 +110,12 @@ export default function Experience() {
           {DATA.map((item: ExperienceItem, index: number) => (
             <article
               key={item.id}
-              className={`group relative bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 ${
+              className={`group relative bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer ${
                 expanded ? "hover:scale-[1.02]" : "hover:scale-105"
               }`}
               onMouseEnter={() => setHoveredCard(item.id)}
               onMouseLeave={() => setHoveredCard(null)}
+              onClick={() => setExpandedCard(expandedCard === item.id ? null : item.id)}
               style={{
                 animationDelay: `${index * 100}ms`,
                 animation: 'fadeInUp 0.6s ease-out forwards',
@@ -195,7 +191,7 @@ export default function Experience() {
                 {/* Expanded Content */}
                 <div
                   className={`transition-all duration-500 overflow-hidden ${
-                    expanded ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+                    expanded || expandedCard === item.id ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
                   }`}
                 >
                   {item.bullets && item.bullets.length > 0 && (
@@ -223,7 +219,11 @@ export default function Experience() {
                 <div className={`absolute bottom-4 right-4 transition-all duration-300 ${
                   hoveredCard === item.id ? "opacity-100 translate-x-0" : "opacity-0 translate-x-2"
                 }`}>
-                  <FiArrowUpRight className="w-5 h-5 text-emerald-500" />
+                  {expandedCard === item.id ? (
+                    <FiChevronUp className="w-5 h-5 text-emerald-500" />
+                  ) : (
+                    <FiArrowUpRight className="w-5 h-5 text-emerald-500" />
+                  )}
                 </div>
               </div>
 
