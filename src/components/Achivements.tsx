@@ -11,6 +11,7 @@ export type Achievement = {
   image?: string;              // optional image URL
   achievementdate?: string;    // optional date string
   other_links?: string[];      // optional array of links
+  details?: string;
   createdAt?: string;          // optional, from timestamps
   updatedAt?: string;          // optional, from timestamps
 };
@@ -23,6 +24,7 @@ const SAMPLE: Achievement[] = [
     org: "University Hackathon",
     year: 2023,
     description: "First place for an end-to-end ML pipeline that predicted energy output.",
+    Details: "Developed a comprehensive machine learning pipeline that integrated data preprocessing, model training, and deployment to predict energy output with high accuracy. The project utilized advanced algorithms and was recognized for its innovation and practical application in the energy sector.",
     tags: ["Machine Learning", "Python", "Award"],
     image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",
   },
@@ -34,6 +36,7 @@ const SAMPLE: Achievement[] = [
     description: "Co-authored a dataset & methods paper on solar forecasting interpretability.",
     tags: ["Research", "Publication"],
     image: "https://images.unsplash.com/photo-1532619675605-1ede6c2ed2b0?w=800&h=600&fit=crop",
+    link: "https://example.com/solar-forecasting-paper",
   },
   {
     id: "a3",
@@ -342,6 +345,9 @@ export default function AchievementsTimeline({ data }: Props) {
             <div className="p-8">
               <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed mb-6">
                 {selected.description}
+              </p>
+              <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed mb-6">
+                {selected.Details}
               </p>
 
               {/* Tags */}

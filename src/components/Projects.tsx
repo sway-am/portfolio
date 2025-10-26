@@ -118,7 +118,7 @@ export default function ProjectsSection() {
             <FiCode className="w-4 h-4" />
             <span>Portfolio Showcase</span>
           </div>
-          <h2 className="text-5xl sm:text-6xl font-bold text-transparent leading-tight bg-clip-text bg-gradient-to-r from-slate-900 via-emerald-700 to-slate-900 dark:from-slate-100 dark:via-emerald-400 dark:to-slate-100 mb-4 ">
+          <h2 className="py-1 text-5xl sm:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-emerald-700 to-slate-900 dark:from-slate-100 dark:via-emerald-400 dark:to-slate-100 mb-4">
             Projects
           </h2>
           <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed mb-8">
