@@ -2,67 +2,17 @@
 import React, { useState } from "react";
 import { FiBriefcase, FiMapPin, FiCalendar, FiChevronDown, FiChevronUp, FiArrowUpRight } from "react-icons/fi";
 
-// Sample data - replace with your actual data import
-type ExperienceItem = {
+export type Experience = {
   id: string | number;
+  title: string;             // role
   company: string;
-  role: string;
-  start: string;
-  end?: string;
-  description?: string;
-  bullets?: string[];
-  location?: string;
-  type?: string;
-  logo?: string;
+  duration: string;          // start - end
+  location: string;
+  shortDescription: string;  // description
+  fullDescription: string;   // description + bullets
+  type?: string;             // optional: Full-time, Internship, etc.
+  logo?: string;             // optional: company logo URL
 };
-
-const SAMPLE_DATA: ExperienceItem[] = [
-  {
-    id: 1,
-    company: "Goldman Sachs",
-    role: "Machine Learning Engineer",
-    start: "Jan 2024",
-    end: "Present",
-    location: "New York, NY",
-    type: "Full-time",
-    description: "Leading ML infrastructure development for trading systems",
-    bullets: [
-      "Developed real-time inference pipeline processing 1M+ requests/day",
-      "Optimized model deployment reducing latency by 40%",
-      "Built monitoring dashboard for model performance tracking"
-    ]
-  },
-  {
-    id: 2,
-    company: "Microsoft",
-    role: "Software Engineering Intern",
-    start: "Jun 2023",
-    end: "Aug 2023",
-    location: "Seattle, WA",
-    type: "Internship",
-    description: "Worked on Azure AI services team",
-    bullets: [
-      "Implemented new features for Azure Cognitive Services API",
-      "Improved API response time by 25%",
-      "Collaborated with cross-functional teams on product roadmap"
-    ]
-  },
-  {
-    id: 3,
-    company: "Tech Startup",
-    role: "Full Stack Developer",
-    start: "Jan 2022",
-    end: "Dec 2023",
-    location: "Remote",
-    type: "Contract",
-    description: "Built customer-facing web applications",
-    bullets: [
-      "Developed responsive web apps using React and Node.js",
-      "Implemented CI/CD pipeline reducing deployment time by 60%",
-      "Mentored junior developers on best practices"
-    ]
-  }
-];
 
 export default function Experience() {
   const [expanded, setExpanded] = useState(false);

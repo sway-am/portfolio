@@ -4,64 +4,53 @@ import { FiX, FiChevronLeft, FiChevronRight, FiAward, FiExternalLink } from "rea
 
 export type Achievement = {
   _id?: string;               // MongoDB ObjectId
-  title: string;               // required
-  organisation?: string;       // optional
-  intro?: string;              // optional short description
-  tags?: string[];             // optional array of strings
-  image?: string;              // optional image URL
-  achievementdate?: string;    // optional date string
-  other_links?: string[];      // optional array of links
+  title: string;
+  organisation?: string;
+  intro?: string;
+  tags?: string[];
+  image?: string;
+  year? : number;
   details?: string;
-  createdAt?: string;          // optional, from timestamps
-  updatedAt?: string;          // optional, from timestamps
+  createdAt?: string;
+  updatedAt?: string;
+  link?: string;
 };
 
+type Props = {};
 
-const SAMPLE: Achievement[] = [
-  {
-    id: "a1",
-    title: "Best ML Project",
-    org: "University Hackathon",
-    year: 2023,
-    description: "First place for an end-to-end ML pipeline that predicted energy output.",
-    Details: "Developed a comprehensive machine learning pipeline that integrated data preprocessing, model training, and deployment to predict energy output with high accuracy. The project utilized advanced algorithms and was recognized for its innovation and practical application in the energy sector.",
-    tags: ["Machine Learning", "Python", "Award"],
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",
-  },
-  {
-    id: "a2",
-    title: "Paper Accepted",
-    org: "Solar Forecasting Workshop",
-    year: 2024,
-    description: "Co-authored a dataset & methods paper on solar forecasting interpretability.",
-    tags: ["Research", "Publication"],
-    image: "https://images.unsplash.com/photo-1532619675605-1ede6c2ed2b0?w=800&h=600&fit=crop",
-    link: "https://example.com/solar-forecasting-paper",
-  },
-  {
-    id: "a3",
-    title: "Edge Inference Demo",
-    org: "Goldman Sachs Internship",
-    year: 2025,
-    description: "Deployed a TensorRT-optimized model achieving real-time inference on edge devices.",
-    tags: ["TensorRT", "Optimization", "Deployment"],
-    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=600&fit=crop",
-  },
-];
-
-type Props = { data?: Achievement[] };
-
-export default function AchievementsTimeline({ data }: Props) {
-  const items = (data && data.length ? data : SAMPLE).slice().sort((a, b) => Number(b.year ?? 0) - Number(a.year ?? 0));
+export default function AchievementsTimeline({}: Props) {
+  const [items, setItems] = useState<Achievement[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<Achievement | null>(null);
   const scrollerRef = useRef<HTMLDivElement | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [hoveredCard, setHoveredCard] = useState<string | number | null>(null);
 
+  // Fetch achievements from backend
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setSelected(null);
+    const fetchAchievements = async () => {
+      try {
+        const res = await fetch("/api/achievements");
+        const data: Achievement[] = await res.json();
+        // sort by achievementdate descending
+        setItems(data.sort((a, b) => {
+          const dateA = new Date(a.achievementdate || "").getTime();
+          const dateB = new Date(b.achievementdate || "").getTime();
+          return dateB - dateA;
+        }));
+      } catch (err) {
+        console.error("Failed to fetch achievements", err);
+      } finally {
+        setLoading(false);
+      }
     };
+
+    fetchAchievements();
+  }, []);
+
+  // keyboard escape
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setSelected(null); };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
@@ -91,8 +80,7 @@ export default function AchievementsTimeline({ data }: Props) {
     const cardRect = card.getBoundingClientRect();
     const containerRect = el.getBoundingClientRect();
     const cardCenter = cardRect.left - containerRect.left + cardRect.width / 2;
-    const scrollLeft = cardCenter - containerCenter;
-    el.scrollTo({ left: scrollLeft, behavior: "smooth" });
+    el.scrollTo({ left: cardCenter - containerCenter, behavior: "smooth" });
   };
 
   const scrollNext = () => snapTo(Math.min(items.length - 1, activeIndex + 1));
@@ -113,6 +101,9 @@ export default function AchievementsTimeline({ data }: Props) {
       cancelAnimationFrame(raf);
     };
   }, [items.length]);
+
+  if (loading) return <p className="text-center py-20 text-lg">Loading Achievements...</p>;
+  if (!items.length) return <p className="text-center py-20 text-lg">No achievements found.</p>;
 
   return (
     <section id="achievements" 

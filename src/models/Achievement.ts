@@ -8,9 +8,10 @@ export interface IAchievement extends Document {
   intro?: string;
   tags?: string[];
   image?: string;
-  achievementdate?: string; // or Date if preferred
+  year? : number;
   other_links?: string[];
   details?: string; // new field
+  link?: string;
 }
 
 // 2️⃣ Define Mongoose schema
@@ -20,9 +21,9 @@ const achievementSchema: Schema<IAchievement> = new Schema({
   intro: { type: String },
   tags: { type: [String], default: [] },
   image: { type: String },
-  achievementdate: { type: String },
-  other_links: { type: [String], default: [] },
+  year: {type: Number, required: true},
   details: { type: String }, // added field
+  link: { type: String},
 });
 
 // 3️⃣ Create or reuse model
