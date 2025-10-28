@@ -3,7 +3,7 @@ import mongoose, { Document, Schema, Model } from "mongoose";
 
 
 export interface IArticle extends Document {
-  id: string;
+  _id: string;
   title: string;
   intro: string;
   readtime: number;
@@ -15,7 +15,7 @@ export interface IArticle extends Document {
 
 
 const articleSchema: Schema<IArticle> = new Schema({
-  id: { type: String, required: true, unique: true },
+  _id: { type: String, required: true, unique: true },
   title: { type: String, required: true },
   intro: { type: String, required: true },
   readtime: { type: Number, required: true },

@@ -48,7 +48,7 @@ export type Experiences = {
 }
 
 export type Blog = {
-  id : string;
+  _id : string;
   title: string;
   intro: string;
   article_link: string;
@@ -59,12 +59,13 @@ export type Blog = {
 }
 
 export type Projects = {
+  _id: string;
   title: string;
-  intro?: string;
-  fullDescription?: string;
-  techStack: string[];
+  description?: string;
+  points?: string[];
+  tech: string[];
   github?: string;
-  liveDemo?: string;
+  demo?: string;
   image?: string;
 }
 
@@ -77,7 +78,7 @@ export type Skills = {
 async function getAchievements(): Promise<Achievement[]> {
   try {
     const res = await fetch(`${baseUrl}/api/achievements`, {
-      next: { revalidate: 3600 },
+      cache: "no-store",
     });
 
     if (!res.ok) {
@@ -96,7 +97,7 @@ async function getAchievements(): Promise<Achievement[]> {
 async function getExperiences(): Promise<Experiences[]> {
   try {
     const res = await fetch(`${baseUrl}/api/experiences`, {
-      next: { revalidate: 3600 },
+      cache: "no-store",
     });
 
     if (!res.ok) {
@@ -115,7 +116,7 @@ async function getExperiences(): Promise<Experiences[]> {
 async function getArticles(): Promise<Blog[]> {
   try {
     const res = await fetch(`${baseUrl}/api/articles`, {
-      next: { revalidate: 3600 },
+      cache: "no-store",
     });
 
     if (!res.ok) {
@@ -134,14 +135,14 @@ async function getArticles(): Promise<Blog[]> {
 async function getProjects(): Promise<Projects[]> {
   try {
     const res = await fetch(`${baseUrl}/api/projects`, {
-      next: { revalidate: 3600 },
+      cache: "no-store", // ⬅️ ensures fresh fetch every time
     });
 
     if (!res.ok) {
       console.error("Failed to fetch Projects:", res.statusText);
       return [];
     }
-    
+
     const data: Projects[] = await res.json();
     return data;
   } catch (err) {
@@ -150,10 +151,11 @@ async function getProjects(): Promise<Projects[]> {
   }
 }
 
+
 async function getSkills(): Promise<Skills[]> {
   try {
     const res = await fetch(`${baseUrl}/api/skills`, {
-      next: { revalidate: 3600 },
+      cache: "no-store",
     });
 
     if (!res.ok) {

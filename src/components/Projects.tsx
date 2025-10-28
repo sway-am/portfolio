@@ -2,8 +2,8 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { FiGithub, FiExternalLink, FiChevronLeft, FiChevronRight, FiSearch, FiCode, FiLayers, FiX } from "react-icons/fi";
 
-type Project = {
-  id: number;
+export type Project = {
+  _id: string;
   title: string;
   description?: string;
   points?: string[];
@@ -13,9 +13,11 @@ type Project = {
   image?: string;
 };
 
-const PROJECTS: Project[] = [
+type Props = {data?: Project[];};
+
+const PROJECTS_FALLBACK: Project[] = [
   {
-    id: 1,
+    _id: "68fe3fa58efde2800ba12b7b",
     title: "Awesome UI Kit",
     description: "A small design system and component library built with Tailwind and accessibility in mind.",
     points: [
@@ -29,7 +31,7 @@ const PROJECTS: Project[] = [
     // image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=600&fit=crop"
   },
   {
-    id: 2,
+    _id: "68fe3fa58efde2800ba12b7c",
     title: "Realtime Chat",
     description: "A lightweight realtime chat app using WebSockets and a serverless backend.",
     points: [
@@ -42,7 +44,7 @@ const PROJECTS: Project[] = [
     image: "https://images.unsplash.com/photo-1611746872915-64382b5c76da?w=800&h=600&fit=crop"
   },
   {
-    id: 3,
+    _id: "68fe3fa58efde2800ba12b7d",
     title: "Analytics Dashboard",
     description: "Analytics dashboards with charts, filters and CSV export for product managers.",
     points: [
@@ -56,7 +58,7 @@ const PROJECTS: Project[] = [
     image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop"
   },
   {
-    id: 4,
+    _id: "68fe3fa58efde2800ba12b7e",
     title: "E-Commerce Platform",
     description: "Full-featured e-commerce platform with cart, checkout, and payment integration.",
     points: [
@@ -71,20 +73,29 @@ const PROJECTS: Project[] = [
   }
 ];
 
-export default function ProjectsSection() {
+  export default function ProjectsSection({ data }: Props) {
+  // ✅ use backend data if available, otherwise fallback
+  const PROJECTS = data && data.length > 0 ? data : PROJECTS_FALLBACK;
+  
   const [query, setQuery] = useState("");
   const [activeTech, setActiveTech] = useState<string | null>(null);
   const [index, setIndex] = useState(0);
   const [showListMobile, setShowListMobile] = useState(false);
+  console.log("PROJECTS:", PROJECTS);
+  console.log("📦 PROJECT DATA RECEIVED:", data);
 
+  // ✅ Tech tags extraction
   const techList = useMemo(() => {
     const s = new Set<string>();
-    PROJECTS.forEach(p => p.tech.forEach(t => s.add(t)));
+    PROJECTS.forEach((p) => p.tech.forEach((t) => s.add(t)));
     return Array.from(s).sort();
-  }, []);
+  }, [PROJECTS]);
 
-  const filtered = PROJECTS.filter(p => {
-    const matchesQuery = [p.title, p.description, ...(p.tech || [])].join(" ").toLowerCase().includes(query.toLowerCase());
+  const filtered = PROJECTS.filter((p) => {
+    const matchesQuery = [p.title, p.description, ...(p.tech || [])]
+      .join(" ")
+      .toLowerCase()
+      .includes(query.toLowerCase());
     const matchesTech = activeTech ? p.tech.includes(activeTech) : true;
     return matchesQuery && matchesTech;
   });
@@ -98,6 +109,7 @@ export default function ProjectsSection() {
 
   const next = () => setIndex(i => (filtered.length ? (i + 1) % filtered.length : 0));
   const prev = () => setIndex(i => (filtered.length ? (i - 1 + filtered.length) % filtered.length : 0));
+
 
   return (
     <section 
@@ -341,7 +353,7 @@ export default function ProjectsSection() {
               <div className="p-4 max-h-[70vh] overflow-auto space-y-2">
                 {filtered.map((p, i) => (
                   <button
-                    key={p.id}
+                    key={p._id}
                     onClick={() => { setIndex(i); setShowListMobile(false); }}
                     className={`w-full text-left p-4 rounded-xl transition-all duration-300 group ${
                       i === index 

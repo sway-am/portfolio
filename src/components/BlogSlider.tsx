@@ -4,7 +4,7 @@ import { FiArrowUpRight, FiSearch, FiX, FiShare2, FiBook, FiClock, FiTag, FiExte
 
 
 type Blog = {
-  id : string; 
+  _id : string; 
   title: string;
   intro: string;
   article_link: string;
@@ -19,7 +19,7 @@ type Props = { data?: Blog[] };
 
 const BLOGS: Blog[] = [
   { 
-    id :"sample1",
+    _id :"sample1",
     title: "React Mastery", 
     intro: "Tips to master React effectively.", 
     article_link: "/blog/react-master", 
@@ -110,10 +110,10 @@ export default function BlogMosaic({ data }: Props) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {filtered.map((blog, index) => (
             <article
-              key={blog.id}
+              key={blog._id}
               className="group relative overflow-hidden rounded-2xl bg-white dark:bg-gray-800 shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer border border-slate-100 dark:border-gray-700"
               onClick={() => setSelected(blog)}
-              onMouseEnter={() => setHoveredCard(blog.id)}
+              onMouseEnter={() => setHoveredCard(blog._id)}
               onMouseLeave={() => setHoveredCard(null)}
               role="button"
               tabIndex={0}
@@ -130,7 +130,7 @@ export default function BlogMosaic({ data }: Props) {
             >
               {/* Gradient overlay on hover */}
               <div className={`absolute inset-0 bg-gradient-to-br from-emerald-400/10 via-teal-400/10 to-blue-400/10 transition-opacity duration-500 ${
-                hoveredCard === blog.id ? 'opacity-100' : 'opacity-0'
+                hoveredCard === blog._id ? 'opacity-100' : 'opacity-0'
               }`}></div>
 
               <div className="relative p-6 flex flex-col h-full">

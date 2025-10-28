@@ -1,87 +1,116 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { FiCode, FiLayers, FiTool, FiServer, FiDatabase, FiCloud, FiZap } from "react-icons/fi";
 
 export type Skill = {
   title: string;        // e.g., "React"
-  skill_type: string;   // e.g., "Frontend", "Backend", "Database", "DevOps", "Tools"
-  proficiency: number;  // 0-100
-  icon?: string;        // optional icon name for frontend
+  skill_type: string;   // e.g., "Frontend", "Backend", "Database", etc.
+  proficiency: number;  // 0–100
+  icon?: string;        // optional icon name
 };
-
 
 type SkillCategory = {
-  name: string;
-  icon: React.ReactNode;
-  color: string;
-  skills: Skill[];
+  name: string;               // category name (Frontend, Backend, etc.)
+  icon: React.ReactNode;      // category icon component
+  color: string;              // Tailwind color name for accent
+  skills: Skill[];            // list of skills belonging to this category
 };
 
-const SKILL_CATEGORIES: SkillCategory[] = [
+type Props = {data?: Skill[]; };
+export const SKILL_CATEGORIES_FALLBACK: SkillCategory[] = [
   {
     name: "Frontend",
     icon: <FiCode className="w-5 h-5" />,
     color: "emerald",
     skills: [
-      { name: "React", level: 95, category: "Frontend" },
-      { name: "TypeScript", level: 90, category: "Frontend" },
-      { name: "Next.js", level: 88, category: "Frontend" },
-      { name: "Tailwind CSS", level: 92, category: "Frontend" },
-      { name: "JavaScript", level: 93, category: "Frontend" },
-      { name: "HTML/CSS", level: 95, category: "Frontend" },
-    ]
+      { title: "React", proficiency: 95, skill_type: "Frontend" },
+      { title: "TypeScript", proficiency: 90, skill_type: "Frontend" },
+      { title: "Next.js", proficiency: 88, skill_type: "Frontend" },
+      { title: "Tailwind CSS", proficiency: 92, skill_type: "Frontend" },
+      { title: "JavaScript", proficiency: 93, skill_type: "Frontend" },
+      { title: "HTML/CSS", proficiency: 95, skill_type: "Frontend" },
+    ],
   },
   {
     name: "Backend",
     icon: <FiServer className="w-5 h-5" />,
     color: "blue",
     skills: [
-      { name: "Node.js", level: 85, category: "Backend" },
-      { name: "Python", level: 88, category: "Backend" },
-      { name: "Express", level: 82, category: "Backend" },
-      { name: "REST APIs", level: 90, category: "Backend" },
-      { name: "GraphQL", level: 75, category: "Backend" },
-    ]
+      { title: "Node.js", proficiency: 85, skill_type: "Backend" },
+      { title: "Python", proficiency: 88, skill_type: "Backend" },
+      { title: "Express", proficiency: 82, skill_type: "Backend" },
+      { title: "REST APIs", proficiency: 90, skill_type: "Backend" },
+      { title: "GraphQL", proficiency: 75, skill_type: "Backend" },
+    ],
   },
   {
     name: "Database",
     icon: <FiDatabase className="w-5 h-5" />,
     color: "purple",
     skills: [
-      { name: "PostgreSQL", level: 85, category: "Database" },
-      { name: "MongoDB", level: 80, category: "Database" },
-      { name: "Redis", level: 70, category: "Database" },
-      { name: "Prisma", level: 78, category: "Database" },
-    ]
+      { title: "PostgreSQL", proficiency: 85, skill_type: "Database" },
+      { title: "MongoDB", proficiency: 80, skill_type: "Database" },
+      { title: "Redis", proficiency: 70, skill_type: "Database" },
+      { title: "Prisma", proficiency: 78, skill_type: "Database" },
+    ],
   },
   {
     name: "DevOps & Cloud",
     icon: <FiCloud className="w-5 h-5" />,
     color: "teal",
     skills: [
-      { name: "AWS", level: 75, category: "DevOps" },
-      { name: "Docker", level: 82, category: "DevOps" },
-      { name: "CI/CD", level: 80, category: "DevOps" },
-      { name: "Vercel", level: 90, category: "DevOps" },
-      { name: "Git", level: 93, category: "DevOps" },
-    ]
+      { title: "AWS", proficiency: 75, skill_type: "DevOps" },
+      { title: "Docker", proficiency: 82, skill_type: "DevOps" },
+      { title: "CI/CD", proficiency: 80, skill_type: "DevOps" },
+      { title: "Vercel", proficiency: 90, skill_type: "DevOps" },
+      { title: "Git", proficiency: 93, skill_type: "DevOps" },
+    ],
   },
   {
     name: "Tools & Others",
     icon: <FiTool className="w-5 h-5" />,
     color: "orange",
     skills: [
-      { name: "Figma", level: 85, category: "Tools" },
-      { name: "VS Code", level: 95, category: "Tools" },
-      { name: "Testing (Jest)", level: 78, category: "Tools" },
-      { name: "Agile/Scrum", level: 82, category: "Tools" },
-    ]
-  }
+      { title: "Figma", proficiency: 85, skill_type: "Tools" },
+      { title: "VS Code", proficiency: 95, skill_type: "Tools" },
+      { title: "Testing (Jest)", proficiency: 78, skill_type: "Tools" },
+      { title: "Agile/Scrum", proficiency: 82, skill_type: "Tools" },
+    ],
+  },
 ];
 
-export default function Skills() {
+export default function Skills({ data }: Props) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
+
+  // ✅ Merge backend data into grouped categories
+  const SKILL_CATEGORIES: SkillCategory[] = useMemo(() => {
+    if (!data || data.length === 0) return SKILL_CATEGORIES_FALLBACK;
+
+    // Define category icons & colors by type
+    const meta = {
+      Frontend: { icon: <FiCode />, color: "emerald" },
+      Backend: { icon: <FiServer />, color: "blue" },
+      Database: { icon: <FiDatabase />, color: "purple" },
+      DevOps: { icon: <FiCloud />, color: "teal" },
+      Tools: { icon: <FiTool />, color: "orange" },
+    } as Record<string, { icon: React.ReactNode; color: string }>;
+
+    // Group skills by type dynamically
+    const grouped: Record<string, Skill[]> = {};
+    data.forEach((skill) => {
+      if (!grouped[skill.skill_type]) grouped[skill.skill_type] = [];
+      grouped[skill.skill_type].push(skill);
+    });
+
+    // Convert to SkillCategory[]
+    return Object.entries(grouped).map(([type, skills]) => ({
+      name: type,
+      icon: meta[type]?.icon || <FiLayers />,
+      color: meta[type]?.color || "emerald",
+      skills,
+    }));
+  }, [data]);
 
   const displayedCategories = selectedCategory 
     ? SKILL_CATEGORIES.filter(cat => cat.name === selectedCategory)
@@ -215,26 +244,26 @@ export default function Skills() {
               <div className="p-6 space-y-4">
                 {category.skills.map((skill, skillIndex) => (
                   <div
-                    key={skill.name}
+                    key={skill.title}
                     className="group"
-                    onMouseEnter={() => setHoveredSkill(skill.name)}
+                    onMouseEnter={() => setHoveredSkill(skill.title)}
                     onMouseLeave={() => setHoveredSkill(null)}
                   >
                     {/* Skill Name and Level */}
                     <div className="flex items-center justify-between mb-2">
                       <span className={`font-semibold transition-colors ${
-                        hoveredSkill === skill.name 
+                        hoveredSkill === skill.title 
                           ? getColorClasses(category.color, 'text')
                           : 'text-slate-900 dark:text-slate-100'
                       }`}>
-                        {skill.name}
+                        {skill.title}
                       </span>
                       <span className={`text-sm font-bold transition-all duration-300 ${
-                        hoveredSkill === skill.name
+                        hoveredSkill === skill.title
                           ? `${getColorClasses(category.color, 'text')} scale-110`
                           : 'text-slate-500 dark:text-slate-400'
                       }`}>
-                        {skill.level}%
+                        {skill.proficiency}%
                       </span>
                     </div>
 
@@ -249,7 +278,7 @@ export default function Skills() {
                       <div
                         className={`absolute inset-y-0 left-0 bg-gradient-to-r ${getColorClasses(category.color, 'from')} ${getColorClasses(category.color, 'to')} rounded-full transition-all duration-1000 ease-out shadow-lg`}
                         style={{
-                          width: `${skill.level}%`,
+                          width: `${skill.proficiency}%`,
                           transitionDelay: `${(categoryIndex * 100) + (skillIndex * 50)}ms`
                         }}
                       >
@@ -258,10 +287,10 @@ export default function Skills() {
                       </div>
 
                       {/* Hover glow effect */}
-                      {hoveredSkill === skill.name && (
+                      {hoveredSkill === skill.title && (
                         <div
                           className={`absolute inset-y-0 left-0 bg-gradient-to-r ${getColorClasses(category.color, 'from')} ${getColorClasses(category.color, 'to')} blur-sm opacity-50`}
-                          style={{ width: `${skill.level}%` }}
+                          style={{ width: `${skill.proficiency}%` }}
                         ></div>
                       )}
                     </div>
@@ -276,7 +305,7 @@ export default function Skills() {
                     Average Proficiency
                   </span>
                   <span className={`font-bold ${getColorClasses(category.color, 'text')}`}>
-                    {Math.round(category.skills.reduce((acc, s) => acc + s.level, 0) / category.skills.length)}%
+                    {Math.round(category.skills.reduce((acc, s) => acc + s.proficiency, 0) / category.skills.length)}%
                   </span>
                 </div>
               </div>
@@ -321,7 +350,7 @@ export default function Skills() {
                 <div className="text-3xl font-bold">
                   {Math.round(
                     SKILL_CATEGORIES.reduce(
-                      (acc, cat) => acc + cat.skills.reduce((sum, s) => sum + s.level, 0) / cat.skills.length,
+                      (acc, cat) => acc + cat.skills.reduce((sum, s) => sum + s.proficiency, 0) / cat.skills.length,
                       0
                     ) / SKILL_CATEGORIES.length
                   )}%
