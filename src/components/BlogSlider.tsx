@@ -2,98 +2,55 @@
 import React, { useState } from "react";
 import { FiArrowUpRight, FiSearch, FiX, FiShare2, FiBook, FiClock, FiTag, FiExternalLink, FiCopy, FiCheck } from "react-icons/fi";
 
+
 type Blog = {
-  id: number;            // frontend identifier
-  title: string;         // backend title
-  intro: string;         // backend intro
-  readTime: number;      // backend readtime
-  tag?: string;          // backend tag
-  hashtags?: string[];   // backend hashtags
-  publishDate?: string;  // backend publishdate (ISO string)
-  articleLink?: string;  // backend article_link
+  id : string; 
+  title: string;
+  intro: string;
+  article_link: string;
+  hashtags?: string[];
+  publishdate?: string;
+  readtime: number;
+  tag?: string;
 };
 
 
+type Props = { data?: Blog[] };
+
 const BLOGS: Blog[] = [
   { 
-    id: 1, 
+    id :"sample1",
     title: "React Mastery", 
-    summary: "Tips to master React effectively.", 
-    url: "/blog/react-master", 
-    tags: ["react", "tips"],
-    date: "Oct 20, 2024",
-    readTime: 5,
-    category: "Development"
+    intro: "Tips to master React effectively.", 
+    article_link: "/blog/react-master", 
+    hashtags: ["react", "tips"],
+    publishdate: "Oct 20, 2024",
+    readtime: 5,
+    tag: "Development"
   },
-  { 
-    id: 2, 
-    title: "Tailwind CSS", 
-    summary: "Build beautiful UI components fast.", 
-    url: "/blog/tailwind-css", 
-    tags: ["css", "design"],
-    date: "Oct 15, 2024",
-    readTime: 4,
-    category: "Design"
-  },
-  { 
-    id: 3, 
-    title: "Framer Motion", 
-    summary: "Animate React apps like a pro.", 
-    url: "/blog/framer-motion", 
-    tags: ["animation"],
-    date: "Oct 10, 2024",
-    readTime: 6,
-    category: "Animation"
-  },
-  { 
-    id: 4, 
-    title: "Accessibility", 
-    summary: "Make accessible UI with small steps.", 
-    url: "/blog/accessibility", 
-    tags: ["a11y"],
-    date: "Oct 5, 2024",
-    readTime: 7,
-    category: "Best Practices"
-  },
-  { 
-    id: 5, 
-    title: "Performance", 
-    summary: "Keep UIs snappy with performance tips.", 
-    url: "/blog/performance", 
-    tags: ["perf"],
-    date: "Sep 30, 2024",
-    readTime: 5,
-    category: "Optimization"
-  },
-  { 
-    id: 6, 
-    title: "Design Systems", 
-    summary: "Scale design with systems and tokens.", 
-    url: "/blog/design-systems", 
-    tags: ["design"],
-    date: "Sep 25, 2024",
-    readTime: 8,
-    category: "Design"
-  },
-];
+]
 
-export default function BlogMosaic() {
+
+export default function BlogMosaic({ data }: Props) {
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<Blog | null>(null);
   const [shareTarget, setShareTarget] = useState<Blog | null>(null);
-  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
-  const filtered = BLOGS.filter(
+  // Use provided data or empty array as fallback
+  const blogs = data || BLOGS;
+
+  const filtered = blogs.filter(
     (b) => 
       b.title.toLowerCase().includes(query.toLowerCase()) || 
-      b.summary.toLowerCase().includes(query.toLowerCase()) || 
-      (b.tags || []).some(t => t.includes(query.toLowerCase()))
+      b.intro.toLowerCase().includes(query.toLowerCase()) || 
+      (b.hashtags || []).some(t => t.includes(query.toLowerCase()))
   );
 
-  const handleCopy = (url: string) => {
-    const fullUrl = typeof window !== 'undefined' ? window.location.origin + url : url;
-    navigator.clipboard?.writeText(fullUrl);
+  const handleCopy = (article_link: string) => {
+    const fullarticle_link = typeof window !== 'undefined' ? window.location.origin + article_link : article_link;
+    navigator.clipboard?.writeText(fullarticle_link);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -132,7 +89,7 @@ export default function BlogMosaic() {
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search by title, summary, or tag..."
+                placeholder="Search by title, intro, or tag..."
                 className="pl-12 pr-4 py-4 w-full rounded-xl border-2 border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-slate-900 dark:text-slate-100 shadow-lg focus:outline-none focus:border-emerald-400 dark:focus:border-emerald-500 transition-all duration-300"
                 aria-label="Search blogs"
               />
@@ -180,33 +137,33 @@ export default function BlogMosaic() {
                 {/* Header */}
                 <div className="mb-4 flex items-start justify-between gap-3">
                   <div className="flex items-center gap-2">
-                    {blog.category && (
+                    {blog.tag && (
                       <span className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 px-3 py-1 text-xs font-semibold text-white shadow-sm">
                         <FiTag className="w-3 h-3" />
-                        {blog.category}
+                        {blog.tag}
                       </span>
                     )}
                   </div>
                   <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">
                     <FiClock className="w-3 h-3" />
-                    <span>{blog.readTime || 5} min</span>
+                    <span>{blog.readtime || 5} min</span>
                   </div>
                 </div>
 
-                {/* Title & Summary */}
+                {/* Title & intro */}
                 <div className="flex-1">
                   <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-3 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-2">
                     {blog.title}
                   </h3>
                   <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-3">
-                    {blog.summary}
+                    {blog.intro}
                   </p>
                 </div>
 
-                {/* Tags */}
-                {blog.tags && blog.tags.length > 0 && (
+                {/* hashtags */}
+                {blog.hashtags && blog.hashtags.length > 0 && (
                   <div className="mt-4 flex flex-wrap gap-2">
-                    {blog.tags.slice(0, 3).map((tag) => (
+                    {blog.hashtags.slice(0, 3).map((tag) => (
                       <span 
                         key={tag}
                         className="px-2.5 py-1 rounded-md bg-slate-100 dark:bg-gray-700 text-slate-600 dark:text-slate-300 text-xs font-medium"
@@ -220,14 +177,14 @@ export default function BlogMosaic() {
                 {/* Footer */}
                 <div className="mt-6 pt-4 border-t border-slate-100 dark:border-gray-700 flex items-center justify-between gap-3">
                   <span className="text-xs text-slate-500 dark:text-slate-400">
-                    {blog.date || 'Recent'}
+                    {blog.publishdate || 'Recent'}
                   </span>
                   
                   <div className="flex items-center gap-2">
                     <button
                       onClick={(e) => { 
                         e.stopPropagation(); 
-                        window.open(blog.url, '_blank'); 
+                        window.open(blog.article_link, '_blank'); 
                       }}
                       className="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 group/btn"
                     >
@@ -299,26 +256,26 @@ export default function BlogMosaic() {
                 <FiX className="w-5 h-5" />
               </button>
 
-              {selected.category && (
+              {selected.tag && (
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-sm font-medium mb-4">
                   <FiTag className="w-3 h-3" />
-                  {selected.category}
+                  {selected.tag}
                 </div>
               )}
 
               <h2 className="text-3xl font-bold mb-2">{selected.title}</h2>
-              <p className="text-emerald-100 text-lg">{selected.summary}</p>
+              <p className="text-emerald-100 text-lg">{selected.intro}</p>
 
               <div className="mt-6 flex items-center gap-4 text-sm text-emerald-100">
-                {selected.date && (
+                {selected.publishdate && (
                   <span className="flex items-center gap-1.5">
                     <FiClock className="w-4 h-4" />
-                    {selected.date}
+                    {selected.publishdate}
                   </span>
                 )}
                 <span className="flex items-center gap-1.5">
                   <FiBook className="w-4 h-4" />
-                  {selected.readTime || 5} min read
+                  {selected.readtime || 5} min read
                 </span>
               </div>
             </div>
@@ -341,7 +298,7 @@ export default function BlogMosaic() {
                     Topics covered
                   </h4>
                   <div className="flex flex-wrap gap-2">
-                    {(selected.tags || []).map((tag) => (
+                    {(selected.hashtags || []).map((tag) => (
                       <span 
                         key={tag} 
                         className="px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-xs font-medium"
@@ -363,7 +320,7 @@ export default function BlogMosaic() {
                   Share
                 </button>
                 <a 
-                  href={selected.url} 
+                  href={selected.article_link} 
                   target="_blank" 
                   rel="noreferrer" 
                   className="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
@@ -416,16 +373,16 @@ export default function BlogMosaic() {
                 Copy the link below or share via social platforms
               </p>
 
-              {/* URL Copy */}
+              {/* article_link Copy */}
               <div className="flex gap-2 mb-6">
                 <input 
                   readOnly 
-                  value={typeof window !== 'undefined' ? window.location.origin + shareTarget.url : shareTarget.url} 
+                  value={typeof window !== 'undefined' ? window.location.origin + shareTarget.article_link : shareTarget.article_link} 
                   className="flex-1 rounded-lg border-2 border-slate-200 dark:border-gray-700 px-4 py-3 text-sm bg-slate-50 dark:bg-gray-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-emerald-400"
                   onClick={(e) => e.currentTarget.select()}
                 />
                 <button
-                  onClick={() => handleCopy(shareTarget.url)}
+                  onClick={() => handleCopy(shareTarget.article_link)}
                   className={`px-4 py-3 rounded-lg font-medium transition-all duration-300 flex items-center gap-2 ${
                     copied 
                       ? 'bg-green-500 text-white' 
@@ -457,7 +414,7 @@ export default function BlogMosaic() {
                       if (navigator.share) {
                         navigator.share({ 
                           title: shareTarget.title, 
-                          url: typeof window !== 'undefined' ? window.location.origin + shareTarget.url : shareTarget.url 
+                          url: typeof window !== 'undefined' ? window.location.origin + shareTarget.article_link : shareTarget.article_link 
                         });
                       }
                     }} 
@@ -468,7 +425,7 @@ export default function BlogMosaic() {
                   <button 
                     onClick={() => { 
                       window.open(
-                        `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareTarget.title)}&url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin + shareTarget.url : shareTarget.url)}`, 
+                        `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareTarget.title)}&article_link=${encodeURIComponent(typeof window !== 'undefined' ? window.location.origin + shareTarget.article_link : shareTarget.article_link)}`, 
                         '_blank'
                       ); 
                     }} 

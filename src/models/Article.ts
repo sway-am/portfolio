@@ -1,29 +1,31 @@
 // models/Article.ts
 import mongoose, { Document, Schema, Model } from "mongoose";
 
-// 1️⃣ TypeScript interface for an Article
+
 export interface IArticle extends Document {
+  id: string;
   title: string;
   intro: string;
   readtime: number;
   tag?: string;
   hashtags?: string[];
   publishdate?: Date;
-  article_link?: string;
+  article_link: string;
 }
 
-// 2️⃣ Mongoose schema
+
 const articleSchema: Schema<IArticle> = new Schema({
+  id: { type: String, required: true, unique: true },
   title: { type: String, required: true },
   intro: { type: String, required: true },
   readtime: { type: Number, required: true },
   tag: { type: String },
   hashtags: { type: [String], default: [] },
   publishdate: { type: Date },
-  article_link: { type: String },
+  article_link: { type: String, default: "https://medium.com/@mohanty.swayam060404" },
 });
 
-// 3️⃣ Create or reuse model
+
 const Article: Model<IArticle> =
   mongoose.models.Article || mongoose.model<IArticle>("Article", articleSchema);
 
